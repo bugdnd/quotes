@@ -1,0 +1,54 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}Случайная цитата{% endblock %}
+
+{% block content %}
+    {% if quote %}
+        <div class="quote">
+            <div class="quote-text">"{{ quote.text }}"</div>
+            <div class="quote-source">{{ quote.source.name }} ({{ quote.source.get_source_type_display }})</div>
+            
+            <div class="vote-buttons">
+                <button class="vote-btn {% if user_vote == 'like' %}active{% endif %}" 
+                        onclick="vote({{ quote.id }}, true)">
+                    👍 {{ likes_count }}
+                </button>
+                <button class="vote-btn {% if user_vote == 'dislike' %}active{% endif %}" 
+                        onclick="vote({{ quote.id }}, false)">
+                    👎 {{ dislikes_count }}
+                </button>
+            </div>
+            
+            <div class="stats">
+                Просмотров: {{ quote.views_count }} | Вес: {{ quote.weight }}
+            </div>
+        </div>
+        
+        <button class="btn" onclick="location.reload()">Новая цитата</button>
+    {% else %}
+        <p>Цитат пока нет. <a href="{% url 'add_quote' %}">Добавьте первую!</a></p>
+    {% endif %}
+
+    <script>
+        function vote(quoteId, isLike) {
+            fetch(`/vote/${quoteId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: `is_like=${isLike}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+{% endblock %}
+
+

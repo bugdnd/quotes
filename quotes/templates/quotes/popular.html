@@ -1,0 +1,25 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}Популярные цитаты{% endblock %}
+
+{% block content %}
+    <h2>10 самых популярных цитат</h2>
+    
+    {% if quotes %}
+        {% for quote in quotes %}
+            <div class="quote">
+                <div class="quote-text">"{{ quote.text }}"</div>
+                <div class="quote-source">{{ quote.source.name }} ({{ quote.source.get_source_type_display }})</div>
+                <div class="stats">
+                    👍 {{ quote.likes_count }} | Просмотров: {{ quote.views_count }} | Вес: {{ quote.weight }}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>Цитат пока нет.</p>
+    {% endif %}
+    
+    <p><a href="{% url 'home' %}">← Назад к главной</a></p>
+{% endblock %}
+
+

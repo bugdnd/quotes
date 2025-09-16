@@ -1,0 +1,32 @@
+{% extends 'quotes/base.html' %}
+
+{% block title %}Добавить цитату{% endblock %}
+
+{% block content %}
+    <h2>Добавить новую цитату</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.source.id_for_label }}">Источник:</label>
+            {{ form.source }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.text.id_for_label }}">Текст цитаты:</label>
+            {{ form.text }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.weight.id_for_label }}">Вес (1-10):</label>
+            {{ form.weight }}
+        </div>
+        
+        <button type="submit" class="btn">Добавить цитату</button>
+    </form>
+    
+    <p><a href="{% url 'home' %}">← Назад к главной</a></p>
+{% endblock %}
+
+
